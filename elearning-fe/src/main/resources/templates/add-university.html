@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="/head.html :: headerfiles">
+</head>
+<body>
+
+	<div id="wrapper">
+		<ul th:replace="/sidebar.html :: sidebar"></ul>
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<nav th:replace="/topbar.html :: topbar"></nav>
+				<form th:replace="/add.html :: addUniversity"></form>
+			</div>
+		</div>
+	</div>
+
+	<div th:insert="/footer.html :: footer"></div>
+
+	<div th:insert="/scripts.html :: scripts"></div>
+
+</body>
+
+</html>
