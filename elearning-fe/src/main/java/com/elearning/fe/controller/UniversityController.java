@@ -3,6 +3,9 @@ package com.elearning.fe.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -31,19 +34,21 @@ public class UniversityController {
 
 	@GetMapping("/add")
 	public String addPage(Model model) {
-		return "add-university";
+		return "university/add-university";
 	}
 
 	@PostMapping("/add")
 	public String add(@Valid @ModelAttribute("university") UniversityFeModel universityModel, Errors errors) {
 		if (errors.hasErrors()) {
-			
 			errors.getAllErrors().forEach(error -> log.error(error.getDefaultMessage()));
+			return "university/add-university";
 		}
-
-		String string = rest.postForObject("http://localhost:8181/api/university/add", universityModel, String.class);
-		System.out.println(string);
+		
+		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/university", HttpMethod.POST, new HttpEntity<UniversityFeModel>(universityModel), Void.class);
+		HttpHeaders header = response.getHeaders();
+		System.out.println("Location: " + header.getLocation());
 		return "redirect:/";
 
 	}
+	
 }

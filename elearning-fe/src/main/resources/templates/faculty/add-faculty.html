@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="/fragments/common/head.html :: headerfiles">
+</head>
+<body>
+
+	<div id="wrapper">
+		<ul th:replace="/fragments/common/sidebar.html :: sidebar"></ul>
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<nav th:replace="/fragments/common/topbar.html :: topbar"></nav>
+				<form th:replace="/faculty/add.html :: add (object='faculty')"></form>
+			</div>
+		</div>
+	</div>
+
+	<div th:insert="/fragments/common/footer.html :: footer"></div>
+
+	<div th:replace="/fragments/common/scripts.html :: scripts"></div>
+
+</body>
+
+<script>
+$(document).ready(function () {
+    $('select').selectize({
+        sortField: 'text'
+    });
+});
+</script>
+
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<form method="POST" th:fragment="add(object)"
+		th:object="${__${object}__}" class="form-style">
+		<fieldset>
+			<legend style="padding-top: 20px; font-size: 37px;">
+				<span th:text="#{__${object}__.add}">Add</span>
+			</legend>
+		</fieldset>
+		<div th:replace="/fragments/common/input-name.html :: inputName"></div>
+		<div
+			th:replace="/fragments/inputs/select-one.html :: select('faculty.field.university', 'University', ${object}, 'university', 'universities')"></div>
+		<div class="form-group row">
+			<div class="col-sm-10">
+				<button type="submit" class="btn btn-primary"
+					th:text="#{global.submit}">Submit</button>
+			</div>
+		</div>
+	</form>
+
+
+</body>
+
+</html>

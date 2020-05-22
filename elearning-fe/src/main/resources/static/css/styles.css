@@ -1,0 +1,5 @@
+.validationError {
+	position: relative;
+	top: 3px;
+	color: #DC143C;
+}

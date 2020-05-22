@@ -6,18 +6,23 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@JsonDeserialize(using = UniversityDeserializer.class)
 public class UniversityFeModel extends BaseClassModel {
 
-	@Size(max = 65535)
+	@Size(max = 100)
 	@NotEmpty
 	private String name;
 
