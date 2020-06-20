@@ -48,7 +48,7 @@ public class UserFeModel extends BaseClassModel {
 	
 	private Date dateRegistered;
 	
-	private FacultyFeModel faculty;
+	private BranchFeModel branch;
 	
 	private RoleFeModel role;
 	

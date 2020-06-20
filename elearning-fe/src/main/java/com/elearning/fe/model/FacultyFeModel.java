@@ -24,7 +24,7 @@ public class FacultyFeModel extends BaseClassModel {
 	@NotNull
 	private UniversityFeModel university;
 	
-	private List<UserFeModel> studentsAndProfessors = new ArrayList<>();
+	private List<BranchFeModel> branches = new ArrayList<>();
 
 	
 }

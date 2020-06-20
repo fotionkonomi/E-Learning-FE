@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="/fragments/common/head.html :: headerfiles">
+</head>
+<body>
+
+	<div id="wrapper">
+		<ul th:replace="/fragments/common/sidebar.html :: sidebar"></ul>
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<nav th:replace="/fragments/common/topbar.html :: topbar"></nav>
+				<form th:replace="/branch/add.html :: add (object='branch')"></form>
+			</div>
+		</div>
+	</div>
+
+	<div th:insert="/fragments/common/footer.html :: footer"></div>
+
+	<div th:replace="/fragments/common/scripts.html :: scripts"></div>
+
+</body>
+
+<script>
+$(document).ready(function() {
+	var selectizeUniversity = $('select[id="faculty.university"]');
+	selectizeUniversity.selectize({
+		sortField: 'text',
+		onChange: function(value) {
+			$.ajax({
+				method: 'GET',
+				url: '/faculty/university/' + value,
+				success : function(data) {
+					$("#faculty").removeClass("hidden");
+					var facultySelectize = $('select[id="faculty"]').get(0).selectize;
+					
+					for (var i = 0; i < data.length; i++) {
+						var item = data[i];
+					    var newElement = {
+					            'value':item.id,
+					            'text':item.name,
+					    };
+						
+						facultySelectize.addOption(newElement);
+						facultySelectize.refreshOptions();
+						facultySelectize.addItem(item.id);
+						
+					}
+					$("#submitButton").removeAttr("disabled");
+				}
+			});
+		}
+	});
+	
+	$('select[id="faculty"]').selectize({
+		sortField: 'text'
+	});
+	
+	
+});
+
+</script>
+
+</html>

@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.validation.Valid;
 
@@ -18,50 +19,58 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
-import com.elearning.fe.model.FacultyFeModel;
+import com.elearning.fe.model.BranchFeModel;
 import com.elearning.fe.model.UniversityFeModel;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/faculty")
+@RequestMapping("/branch")
 @Slf4j
-public class FacultyController {
+public class BranchController {
 
 	@Autowired
 	private RestOperations rest;
+
+	@ModelAttribute(name = "branch")
+	public BranchFeModel branch() {
+		return new BranchFeModel();
+	}
 	
 	@ModelAttribute(name = "universities")
 	public Collection<UniversityFeModel> universities() throws RestClientException, URISyntaxException {
 		HttpEntity<UniversityFeModel[]> universities = rest.exchange(RequestEntity.get(new URI("http://localhost:8181/api/university")).build(), UniversityFeModel[].class);
 		return Arrays.asList(universities.getBody());
 	}
-
-	@ModelAttribute(name = "faculty")
-	public FacultyFeModel faculty() {
-		return new FacultyFeModel();
+	
+	@SuppressWarnings("rawtypes")
+	@ModelAttribute(name = "emptyList")
+	public Collection emptyList() {
+		return Collections.EMPTY_LIST;
 	}
-
+	
 	@GetMapping("/add")
 	public String addPage(Model model) {
-		return "faculty/add-faculty";
+		return "branch/add-branch";
 	}
 	
 	@PostMapping("/add")
-	public String add(@Valid @ModelAttribute("faculty") FacultyFeModel facultyFeModel, Errors errors, @RequestHeader String host) {
+	public String add(@Valid @ModelAttribute("branch") BranchFeModel branch, Errors errors) {
 		if (errors.hasErrors()) {
 			errors.getAllErrors().forEach(error -> log.error(error.getDefaultMessage()));
-			return "faculty/add-faculty";
+			return "branch/add-branch";
 		}
 		
-		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/faculty", HttpMethod.POST, new HttpEntity<FacultyFeModel>(facultyFeModel), Void.class);
+		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/branch", HttpMethod.POST, new HttpEntity<BranchFeModel>(branch), Void.class);
 		HttpHeaders header = response.getHeaders();
-		return "redirect:/" + host + header.getLocation().getPath();
+		System.out.println("Location: " + header.getLocation());
+		return "redirect:/";
 
 	}
+	
+	
 }

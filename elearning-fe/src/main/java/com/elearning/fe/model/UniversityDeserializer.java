@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.node.LongNode;
 
 public class UniversityDeserializer extends StdDeserializer<UniversityFeModel> {
 
@@ -40,9 +39,18 @@ public class UniversityDeserializer extends StdDeserializer<UniversityFeModel> {
 		while (facultyNodes.hasNext()) {
 			JsonNode facultyNode = facultyNodes.next();
 			FacultyFeModel faculty = new FacultyFeModel();
-			faculty.setId(facultyNode.get("id").asLong());
-			faculty.setTimestamp(new Date(facultyNode.get("timestamp").asLong()));
-			faculty.setName(facultyNode.get("name").asText());
+			JsonNode facultyId = facultyNode.get("id");
+			if(facultyId != null) {
+				faculty.setId(facultyId.asLong());
+			}
+			JsonNode facultyTimestamp = facultyNode.get("timestamp");
+			if(facultyTimestamp != null) {
+				faculty.setTimestamp(new Date(facultyTimestamp.asLong()));
+			}
+			JsonNode facultyName = facultyNode.get("name");
+			if(facultyName != null) {
+				faculty.setName(facultyName.asText());
+			}
 			faculties.add(faculty);
 		}
 		university.setFaculties(faculties);

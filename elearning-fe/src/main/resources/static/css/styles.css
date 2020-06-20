@@ -3,3 +3,7 @@
 	top: 3px;
 	color: #DC143C;
 }
+
+.hidden {
+	display: none;
+}

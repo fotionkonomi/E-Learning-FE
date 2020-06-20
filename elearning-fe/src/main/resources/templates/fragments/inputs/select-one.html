@@ -6,9 +6,9 @@
 		th:text="#{__${internationalizedMessage}__}">${internationalizedMessage}</label>
 	<div class="col-sm-10">
 	
-		<select id="select-object" th:placeholder="#{select.field.null}"
+		<select th:id="${object}" th:placeholder="#{select.field.null}"
  th:object="${__${parentObject}__}" th:field="*{__${object}__}" class="form-control mdb-select md-form">
-			<option value=""></option>
+			<option id="firstOptionElement" value=""></option>
 			<option th:each="i : ${__${options}__}"
 				th:text="${i.name}" th:value="${i.id}"></option>
 		</select>
