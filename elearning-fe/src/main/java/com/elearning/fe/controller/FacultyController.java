@@ -59,7 +59,8 @@ public class FacultyController {
 			return "faculty/add-faculty";
 		}
 		
-		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/faculty", HttpMethod.POST, new HttpEntity<FacultyFeModel>(facultyFeModel), Void.class);
+		HttpEntity<FacultyFeModel> httpEntity =  new HttpEntity<FacultyFeModel>(facultyFeModel);
+		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/faculty", HttpMethod.POST, httpEntity, Void.class);
 		HttpHeaders header = response.getHeaders();
 		return "redirect:/" + host + header.getLocation().getPath();
 
