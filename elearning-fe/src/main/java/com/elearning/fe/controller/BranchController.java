@@ -50,7 +50,7 @@ public class BranchController {
 	@SuppressWarnings("rawtypes")
 	@ModelAttribute(name = "emptyList")
 	public Collection emptyList() {
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 	
 	@GetMapping("/add")
@@ -61,10 +61,11 @@ public class BranchController {
 	@PostMapping("/add")
 	public String add(@Valid @ModelAttribute("branch") BranchFeModel branch, Errors errors) {
 		if (errors.hasErrors()) {
-			errors.getAllErrors().forEach(error -> log.error(error.getDefaultMessage()));
+			errors.getAllErrors().forEach(error -> log.error(error.getArguments() + error.getDefaultMessage()));
 			return "branch/add-branch";
 		}
 		
+		log.info("Object created: " + branch);
 		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/branch", HttpMethod.POST, new HttpEntity<BranchFeModel>(branch), Void.class);
 		HttpHeaders header = response.getHeaders();
 		System.out.println("Location: " + header.getLocation());

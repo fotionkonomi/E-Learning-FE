@@ -12,9 +12,9 @@
 		<div th:replace="/fragments/common/input-name.html :: inputName"></div>
 		<div
 			th:replace="/fragments/inputs/select-one.html :: select('faculty.field.university', 'University', ${object}, 'faculty.university', 'universities')"></div>
-		<div id="faculty">
+		<div id="faculty" class="hidden">
 			<div
-				th:replace="/fragments/inputs/select-one.html :: select('branch.field.faculty', 'Branch', ${object}, 'faculty', 'emptyList')"></div>
+				th:replace="/fragments/inputs/select-one.html :: select('branch.field.faculty', 'Faculty', ${object}, 'faculty', 'emptyList')"></div>
 		
 		</div>
 		<div class="form-group row">

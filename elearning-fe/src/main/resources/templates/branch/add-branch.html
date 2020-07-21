@@ -22,41 +22,69 @@
 
 <script>
 $(document).ready(function() {
+	var facultyHidden = true;
+	if($('div #faculty span').html() != undefined) {
+		facultyHidden = false;
+		$("div #faculty").removeClass("hidden");
+	}
 	var selectizeUniversity = $('select[id="faculty.university"]');
 	selectizeUniversity.selectize({
 		sortField: 'text',
 		onChange: function(value) {
-			$.ajax({
-				method: 'GET',
-				url: '/faculty/university/' + value,
-				success : function(data) {
-					$("#faculty").removeClass("hidden");
-					var facultySelectize = $('select[id="faculty"]').get(0).selectize;
-					
-					for (var i = 0; i < data.length; i++) {
-						var item = data[i];
-					    var newElement = {
-					            'value':item.id,
-					            'text':item.name,
-					    };
-						
-						facultySelectize.addOption(newElement);
-						facultySelectize.refreshOptions();
-						facultySelectize.addItem(item.id);
-						
-					}
-					$("#submitButton").removeAttr("disabled");
-				}
-			});
-		}
+			ajaxFillFaculties(value, facultyHidden);
+		},
 	});
 	
 	$('select[id="faculty"]').selectize({
 		sortField: 'text'
 	});
 	
+	$('input[id="faculty.university-selectized"]').on('change keyup copy paste cut', function() {
+		if(!this.value) {
+			var facultySelectize = $('select[id="faculty"]').get(0).selectize;
+			facultySelectize.clear();
+			facultySelectize.clearOptions();
+			$("#submitButton").prop('disabled', true);
+			if(facultyHidden) {
+				$("div #faculty").addClass("hidden");
+			}
+		}
+	});
+	
+	var valueOfFacultyField = $('select[id="faculty.university"]').children().first().val();
+	if(valueOfFacultyField != "") {
+		console.log("Mbushim te dhenat ne fillim");
+		ajaxFillFaculties(valueOfFacultyField, facultyHidden);
+	}
 	
 });
+
+function ajaxFillFaculties(value, facultyHidden) {
+	$.ajax({
+		method: 'GET',
+		url: '/faculty/university/' + value,
+		success : function(data) {
+			if(facultyHidden) {
+				$("div #faculty").removeClass("hidden");
+			}
+			var facultySelectize = $('select[id="faculty"]').get(0).selectize;
+			
+			for (var i = 0; i < data.length; i++) {
+				var item = data[i];
+			    var newElement = {
+			            'value':item.id,
+			            'text':item.name,
+			    };
+				
+				facultySelectize.addOption(newElement);
+				facultySelectize.refreshOptions();
+				facultySelectize.addItem(item.id);
+				
+			}
+			$("#submitButton").removeAttr("disabled");
+		}
+	});
+}
 
 </script>
 

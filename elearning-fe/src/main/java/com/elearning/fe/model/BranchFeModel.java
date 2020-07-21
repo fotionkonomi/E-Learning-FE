@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.elearning.fe.util.constraints.annotation.NotUnselected;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class BranchFeModel extends BaseClassModel {
 	@NotEmpty
 	private String name;
 	
-	@NotNull
+	@NotUnselected
 	private FacultyFeModel faculty;
 	
 	private List<UserFeModel> students = new ArrayList<>();
