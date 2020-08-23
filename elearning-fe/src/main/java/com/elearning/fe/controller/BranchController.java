@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,12 +59,13 @@ public class BranchController {
 		return "branch/add-branch";
 	}
 	
-	@PostMapping("/add")
+	@PostMapping(value = "/add")
 	public String add(@Valid @ModelAttribute("branch") BranchFeModel branch, Errors errors) {
 		if (errors.hasErrors()) {
 			errors.getAllErrors().forEach(error -> log.error(error.getArguments() + error.getDefaultMessage()));
 			return "branch/add-branch";
 		}
+		
 		
 		log.info("Object created: " + branch);
 		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/branch", HttpMethod.POST, new HttpEntity<BranchFeModel>(branch), Void.class);
