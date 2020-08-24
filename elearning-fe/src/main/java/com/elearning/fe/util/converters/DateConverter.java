@@ -8,18 +8,21 @@ import java.util.Date;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class DateConverter implements Converter<String, Date>{
 
 	@Override
 	public Date convert(String source) {
-		DateFormat sdf = new SimpleDateFormat("dow mon dd hh:mm:ss zzz yyy");
+		DateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
         sdf.setLenient(false);
         try {
             Date dateToReturn = sdf.parse(source);
             return dateToReturn; 
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error("The date format isn't EEE MMM dd HH:mm:ss zzz yyyy ");
         }
        
         sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -28,9 +31,9 @@ public class DateConverter implements Converter<String, Date>{
             Date dateToReturn = sdf.parse(source);
             return dateToReturn; 
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error("Date format isn't dd/MM/yyyy");
         }
-        
+        log.info("Returning null for the date");
         return null;
         
 	}

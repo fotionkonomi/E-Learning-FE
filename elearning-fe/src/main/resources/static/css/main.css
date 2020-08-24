@@ -168,12 +168,20 @@ h6 {
   padding-top: 100px;
 }
 
+.p-t-60 {
+	padding-top: 60px;
+}
+
 .p-t-20 {
   padding-top: 20px;
 }
 
 .p-b-100 {
   padding-bottom: 100px;
+}
+
+.p-b-60 {
+	padding-bottom: 60px;
 }
 
 /* ==========================================================================
@@ -428,9 +436,9 @@ input {
    ========================================================================== */
 .card {
   overflow: hidden;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
   background: #fff;
 }
 

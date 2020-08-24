@@ -24,23 +24,23 @@
 </head>
 
 <body>
-    <div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
+    <div class="page-wrapper bg-blue p-t-60 p-b-60 font-robo">
         <div class="wrapper wrapper--w680">
             <div class="card card-1">
                 <div class="card-heading"></div>
                 <div class="card-body">
-                    <h2 class="title">Registration Info</h2>
+                    <h2 class="title" th:text="#{signup.title}">Registration Info</h2>
                     <form method="POST" th:object="${newUser}">
                        <div class="row row-space">
     <div class="input-group col-2">
-                            <input class="input--style-1" th:field="*{firstName}" type="text" placeholder="NAME" name="name">
+                            <input class="input--style-1" th:field="*{firstName}" type="text" th:placeholder="#{signup.firstName}">
                       	<div class="tooltip" th:if="${#fields.hasErrors('firstName')}">
   <span class="tooltiptext" th:errors="*{firstName}">Tooltip text</span>
 </div>
                         </div>
     
     <div class="input-group col-2">
-                            <input class="input--style-1" type="text" th:field="*{lastName}" placeholder="SURNAME" name="surname">
+                            <input class="input--style-1" type="text" th:field="*{lastName}" th:placeholder="#{signup.lastName}">
                        <div class="tooltip" th:if="${#fields.hasErrors('lastName')}">
   <span class="tooltiptext" th:errors="*{lastName}">Tooltip text</span>
 </div>
@@ -50,14 +50,14 @@
 
 <div class="row row-space">
     <div class="input-group col-2">
-                            <input class="input--style-1" type="text" th:field="*{username}" placeholder="USERNAME" name="username">
+                            <input class="input--style-1" type="text" th:field="*{username}" th:placeholder="#{signup.username}">
                         <div class="tooltip" th:if="${#fields.hasErrors('username')}">
   <span class="tooltiptext" th:errors="*{username}">Tooltip text</span>
 </div>
                         </div>
     
     <div class="input-group col-2">
-                            <input class="input--style-1" type="password" th:field="*{password}" placeholder="PASSWORD" name="password">
+                            <input class="input--style-1" type="password" th:field="*{password}" th:placeholder="#{signup.password}">
                       <div class="tooltip" th:if="${#fields.hasErrors('password')}">
   <span class="tooltiptext" th:errors="*{password}">Tooltip text</span>
 </div>
@@ -66,7 +66,7 @@
     
 </div>
 <div class="input-group">
-                            <input class="input--style-1" type="text" th:field="*{email}" placeholder="EMAIL" name="email">
+                            <input class="input--style-1" type="text" th:field="*{email}" th:placeholder="#{signup.email}">
                         <div class="tooltip" th:if="${#fields.hasErrors('email')}">
   <span class="tooltiptext" th:errors="*{email}">Tooltip text</span>
 </div>
@@ -74,7 +74,7 @@
                         <div class="row row-space">
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-1 js-datepicker" type="text" th:field="*{dateOfBirth}" placeholder="BIRTHDATE" name="dateOfBirth">
+                                    <input class="input--style-1 js-datepicker" type="text" th:field="*{dateOfBirth}" th:placeholder="#{signup.birthdate}">
                                     <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                     <div class="tooltip" th:if="${#fields.hasErrors('dateOfBirth')}">
   <span class="tooltiptext" th:errors="*{dateOfBirth}">Tooltip text</span>
@@ -85,7 +85,7 @@
                                 <div class="input-group">
                                     <div class="rs-select2 js-select-simple select--no-search">
                                         <select name="gender" th:placeholder="#{select.field.null}">
-                                            <option th:id="firstOption" th:disabled="true" th:selected="true" th:value="null">GENDER</option>
+                                            <option th:id="firstOption" th:disabled="true" th:selected="true" th:value="null" th:text="#{signup.gender}">GENDER</option>
                                             <option th:each="gender : ${genders}" th:value="${gender}" th:text="${gender}" ></option>
                                         </select>
                                         <div class="select-dropdown"></div>
@@ -98,7 +98,7 @@
                         </div>
                         
                         <div class="p-t-20">
-                            <button class="btn btn--radius btn--green" type="submit">Submit</button>
+                            <button class="btn btn--radius btn--green" th:text="#{global.submit}" type="submit">Submit</button>
                         </div>
                     </form>
                 </div>
