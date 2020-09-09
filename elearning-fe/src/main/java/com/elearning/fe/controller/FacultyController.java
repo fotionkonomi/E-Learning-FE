@@ -25,6 +25,7 @@ import org.springframework.web.client.RestOperations;
 
 import com.elearning.fe.model.FacultyFeModel;
 import com.elearning.fe.model.UniversityFeModel;
+import com.elearning.fe.util.RestCaller;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,11 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 public class FacultyController {
 
 	@Autowired
-	private RestOperations rest;
+	private RestCaller rest;
 	
 	@ModelAttribute(name = "universities")
 	public Collection<UniversityFeModel> universities() throws RestClientException, URISyntaxException {
-		HttpEntity<UniversityFeModel[]> universities = rest.exchange(RequestEntity.get(new URI("http://localhost:8181/api/university")).build(), UniversityFeModel[].class);
+		HttpEntity<UniversityFeModel[]> universities = rest.getExchange("http://localhost:8181/api/university", UniversityFeModel[].class);
 		return Arrays.asList(universities.getBody());
 	}
 
@@ -60,7 +61,7 @@ public class FacultyController {
 		}
 		
 		HttpEntity<FacultyFeModel> httpEntity =  new HttpEntity<FacultyFeModel>(facultyFeModel);
-		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/faculty", HttpMethod.POST, httpEntity, Void.class);
+		HttpEntity<Void> response = rest.postExchange("http://localhost:8181/api/faculty", httpEntity, Void.class);
 		HttpHeaders header = response.getHeaders();
 		return "redirect:/" + host + header.getLocation().getPath();
 
