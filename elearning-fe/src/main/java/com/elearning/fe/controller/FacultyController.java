@@ -25,7 +25,7 @@ import org.springframework.web.client.RestOperations;
 
 import com.elearning.fe.model.FacultyFeModel;
 import com.elearning.fe.model.UniversityFeModel;
-import com.elearning.fe.util.RestCaller;
+import com.elearning.fe.util.impl.RestCaller;
 
 import lombok.extern.slf4j.Slf4j;
 

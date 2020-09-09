@@ -1,9 +1,10 @@
-package com.elearning.fe.util;
+package com.elearning.fe.util.impl;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.elearning.fe.model.UserFeModel;
+import com.elearning.fe.util.IAuthenticationFacade;
 
 @Component
 public class AuthenticationFacade implements IAuthenticationFacade {

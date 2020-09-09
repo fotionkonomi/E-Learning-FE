@@ -1,4 +1,4 @@
-package com.elearning.fe.util;
+package com.elearning.fe.util.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -8,14 +8,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
+import com.elearning.fe.util.IAuthenticationFacade;
+import com.elearning.fe.util.IRestCaller;
+
 @Service
-public class RestCaller {
+public class RestCaller implements IRestCaller {
 	
 	@Autowired
 	private RestOperations rest;
 	
 	@Autowired
 	private IAuthenticationFacade authenticationFacade;
+	
+	public <T> ResponseEntity<T> getExchange(String url,
+			Class<T> responseType) {
+		return exchange(url, HttpMethod.GET, new HttpEntity<Object>(null, null), responseType);
+	}
+	
+	public <T> ResponseEntity<T> postExchange(String url, HttpEntity<?> requestEntity,
+			Class<T> responseType) {
+		return exchange(url, HttpMethod.POST, requestEntity, responseType);
+	}
+	
 	
 	private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> requestEntity,
 			Class<T> responseType, Object... uriVariables) {
@@ -32,18 +46,5 @@ public class RestCaller {
 			Class<T> responseType) {
 		return exchange(url, method, requestEntity, responseType, new Object[0]);
 	}
-	
-	public <T> ResponseEntity<T> getExchange(String url,
-			Class<T> responseType) {
-		return exchange(url, HttpMethod.GET, new HttpEntity<Object>(null, null), responseType);
-	}
-	
-	public <T> ResponseEntity<T> postExchange(String url, HttpEntity<?> requestEntity,
-			Class<T> responseType) {
-		return exchange(url, HttpMethod.POST, requestEntity, responseType);
-	}
-	
-	
-	
 
 }

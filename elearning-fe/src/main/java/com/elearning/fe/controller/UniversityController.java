@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -13,9 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestOperations;
 
 import com.elearning.fe.model.UniversityFeModel;
+import com.elearning.fe.util.impl.RestCaller;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UniversityController {
 
 	@Autowired
-	private RestOperations rest;
+	private RestCaller rest;
 
 	@ModelAttribute(name = "university")
 	public UniversityFeModel university() {
@@ -44,7 +43,7 @@ public class UniversityController {
 			return "university/add-university";
 		}
 		
-		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/university", HttpMethod.POST, new HttpEntity<UniversityFeModel>(universityModel), Void.class);
+		HttpEntity<Void> response = rest.postExchange("http://localhost:8181/api/university", new HttpEntity<UniversityFeModel>(universityModel), Void.class);
 		HttpHeaders header = response.getHeaders();
 		System.out.println("Location: " + header.getLocation());
 		return "redirect:/";

@@ -26,6 +26,7 @@ import org.springframework.web.client.RestOperations;
 
 import com.elearning.fe.model.BranchFeModel;
 import com.elearning.fe.model.UniversityFeModel;
+import com.elearning.fe.util.impl.RestCaller;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BranchController {
 
 	@Autowired
-	private RestOperations rest;
+	private RestCaller rest;
 
 	@ModelAttribute(name = "branch")
 	public BranchFeModel branch() {
@@ -44,7 +45,7 @@ public class BranchController {
 	
 	@ModelAttribute(name = "universities")
 	public Collection<UniversityFeModel> universities() throws RestClientException, URISyntaxException {
-		HttpEntity<UniversityFeModel[]> universities = rest.exchange(RequestEntity.get(new URI("http://localhost:8181/api/university")).build(), UniversityFeModel[].class);
+		HttpEntity<UniversityFeModel[]> universities = rest.getExchange("http://localhost:8181/api/university", UniversityFeModel[].class);
 		return Arrays.asList(universities.getBody());
 	}
 	
@@ -68,7 +69,7 @@ public class BranchController {
 		
 		
 		log.info("Object created: " + branch);
-		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/branch", HttpMethod.POST, new HttpEntity<BranchFeModel>(branch), Void.class);
+		HttpEntity<Void> response = rest.postExchange("http://localhost:8181/api/branch", new HttpEntity<BranchFeModel>(branch), Void.class);
 		HttpHeaders header = response.getHeaders();
 		System.out.println("Location: " + header.getLocation());
 		return "redirect:/";

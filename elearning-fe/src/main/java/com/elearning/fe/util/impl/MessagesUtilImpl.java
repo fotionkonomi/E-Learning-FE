@@ -1,4 +1,4 @@
-package com.elearning.fe.util;
+package com.elearning.fe.util.impl;
 
 import javax.annotation.PostConstruct;
 
@@ -8,6 +8,7 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 
 import com.elearning.fe.common.constants.MessageConstants;
+import com.elearning.fe.util.MessagesUtil;
 
 import lombok.Data;
 
