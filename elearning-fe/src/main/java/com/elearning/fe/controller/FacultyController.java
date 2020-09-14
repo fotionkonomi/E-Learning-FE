@@ -28,7 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("${requestMapping.faculty}")
 @Slf4j
-public class FacultyController {
+public class FacultyController extends AbstractController<FacultyFeModel> {
+
+	public FacultyController() {
+		super(FacultyFeModel.class);
+	}
 
 	@Autowired
 	private RestCaller rest;
@@ -43,23 +47,9 @@ public class FacultyController {
 	public FacultyFeModel faculty() {
 		return new FacultyFeModel();
 	}
-
-	@GetMapping("${requestMapping.add}")
-	public String addPage(Model model) {
-		return "faculty/add-faculty";
-	}
 	
 	@PostMapping("/add")
-	public String add(@Valid @ModelAttribute("faculty") FacultyFeModel facultyFeModel, Errors errors, @RequestHeader String host) {
-		if (errors.hasErrors()) {
-			errors.getAllErrors().forEach(error -> log.error(error.getDefaultMessage()));
-			return "faculty/add-faculty";
-		}
-		
-		HttpEntity<FacultyFeModel> httpEntity =  new HttpEntity<FacultyFeModel>(facultyFeModel);
-		HttpEntity<Void> response = rest.postExchange("http://localhost:8181/api/faculty", httpEntity, Void.class);
-		HttpHeaders header = response.getHeaders();
-		return "redirect:/" + host + header.getLocation().getPath();
-
+	public String addFaculty(@Valid @ModelAttribute("faculty") FacultyFeModel facultyFeModel, Errors errors) {
+		return add(facultyFeModel, errors);
 	}
 }

@@ -33,13 +33,13 @@ public class RestCaller implements IRestCaller {
 		return exchange(url, HttpMethod.GET, new HttpEntity<Object>(null, null), responseType);
 	}
 	
-	public <T> ResponseEntity<T> postExchange(String url, HttpEntity<?> requestEntity,
+	public <T, K> ResponseEntity<T> postExchange(String url, HttpEntity<K> requestEntity,
 			Class<T> responseType) {
 		return exchange(url, HttpMethod.POST, requestEntity, responseType);
 	}
 	
 	
-	private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> requestEntity,
+	private <T, K> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<K> requestEntity,
 			Class<T> responseType, Object... uriVariables) {
 	
 		HttpHeaders headers = new HttpHeaders();
@@ -54,8 +54,10 @@ public class RestCaller implements IRestCaller {
 		
 		log.info("Request body: ");
 		printBody(requestEntity.getBody());
-	
-		ResponseEntity<T> response = rest.exchange(url, method, new HttpEntity<>(requestEntity.getBody(), headers), responseType, uriVariables);
+		
+		HttpEntity<K> entity = new HttpEntity<>(requestEntity.getBody(), headers);
+			
+		ResponseEntity<T> response = rest.exchange(url, method, entity , responseType, uriVariables);
 		
 		log.info("Response body: ");
 		printBody(response.getBody());
@@ -64,7 +66,7 @@ public class RestCaller implements IRestCaller {
 
 	}
 	
-	private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> requestEntity,
+	private <T, K> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<K> requestEntity,
 			Class<T> responseType) {
 		return exchange(url, method, requestEntity, responseType, new Object[0]);
 	}
@@ -74,7 +76,7 @@ public class RestCaller implements IRestCaller {
 	    log.info(gson.toJson(object));
 	}
 	
-	private void printApiCallInformation(String url, HttpMethod method, HttpEntity<?> entity) {
+	private <K> void printApiCallInformation(String url, HttpMethod method, HttpEntity<K> entity) {
 		log.info("Request headers: ");
 		entity.getHeaders().forEach((key, value) -> {
 	        log.info(String.format(

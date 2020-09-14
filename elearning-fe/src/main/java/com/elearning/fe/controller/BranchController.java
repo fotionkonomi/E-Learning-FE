@@ -33,7 +33,11 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/branch")
 @Slf4j
-public class BranchController {
+public class BranchController extends AbstractController<BranchFeModel> {
+
+	public BranchController() {
+		super(BranchFeModel.class);
+	}
 
 	@Autowired
 	private RestCaller rest;
@@ -55,25 +59,9 @@ public class BranchController {
 		return Collections.emptyList();
 	}
 	
-	@GetMapping("/add")
-	public String addPage(Model model) {
-		return "branch/add-branch";
-	}
-	
 	@PostMapping(value = "/add")
-	public String add(@Valid @ModelAttribute("branch") BranchFeModel branch, Errors errors) {
-		if (errors.hasErrors()) {
-			errors.getAllErrors().forEach(error -> log.error(error.getArguments() + error.getDefaultMessage()));
-			return "branch/add-branch";
-		}
-		
-		
-		log.info("Object created: " + branch);
-		HttpEntity<Void> response = rest.postExchange("http://localhost:8181/api/branch", new HttpEntity<BranchFeModel>(branch), Void.class);
-		HttpHeaders header = response.getHeaders();
-		System.out.println("Location: " + header.getLocation());
-		return "redirect:/";
-
+	public String addBranch(@Valid @ModelAttribute("branch") BranchFeModel branch, Errors errors) {
+		return add(branch, errors);
 	}
 	
 	

@@ -8,6 +8,6 @@ public interface IRestCaller {
 	<T> ResponseEntity<T> getExchange(String url,
 			Class<T> responseType);
 	
-	<T> ResponseEntity<T> postExchange(String url, HttpEntity<?> requestEntity,
+	<T, K> ResponseEntity<T> postExchange(String url, HttpEntity<K> requestEntity,
 			Class<T> responseType);
 }

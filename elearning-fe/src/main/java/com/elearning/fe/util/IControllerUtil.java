@@ -1,6 +1,8 @@
 package com.elearning.fe.util;
 
-public interface IControllerUtil<T> {
+public interface IControllerUtil {
 
-	public String getAddPage();
+	public <T> String getContextPage(Class<T> clazz);
+	
+	public <T> String getAddPage(Class<T> clazz);
 }
