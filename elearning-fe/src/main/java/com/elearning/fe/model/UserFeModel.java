@@ -18,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.elearning.fe.common.enums.GenderEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UserFeModel extends BaseClassModel implements UserDetails {
+
+	private static final long serialVersionUID = -4829622563554311339L;
 
 	@Size(max = 50)
 	@NotEmpty
@@ -74,6 +77,7 @@ public class UserFeModel extends BaseClassModel implements UserDetails {
 	private String token;
 
 	@Override
+	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 		RoleFeModel roleObject = this.getRole();

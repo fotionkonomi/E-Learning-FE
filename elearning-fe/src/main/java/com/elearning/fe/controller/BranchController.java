@@ -39,9 +39,6 @@ public class BranchController extends AbstractController<BranchFeModel> {
 		super(BranchFeModel.class);
 	}
 
-	@Autowired
-	private RestCaller rest;
-
 	@ModelAttribute(name = "branch")
 	public BranchFeModel branch() {
 		return new BranchFeModel();

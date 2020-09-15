@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +23,6 @@ public class CourseFeModel extends BaseClassModel {
 	@NotEmpty
 	private String name;
 	
-	@NotNull
 	private UserFeModel professor;
 	
 	private List<TestFeModel> tests = new ArrayList<>();

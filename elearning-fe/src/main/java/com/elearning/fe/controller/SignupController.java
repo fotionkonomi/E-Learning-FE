@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestOperations;
 
 import com.elearning.fe.common.enums.GenderEnum;
+import com.elearning.fe.model.RoleFeModel;
 import com.elearning.fe.model.UserFeModel;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,6 @@ public class SignupController {
 			errors.getAllErrors().forEach(error -> log.error(error.getArguments() + error.getDefaultMessage()));
 			return "signup";
 		}
-		
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		HttpEntity<Void> response = rest.exchange("http://localhost:8181/api/user", HttpMethod.POST, new HttpEntity<UserFeModel>(user), Void.class);
 		

@@ -1,7 +1,5 @@
 package com.elearning.fe.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -12,6 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.elearning.fe.model.BaseClassModel;
+import com.elearning.fe.util.IAuthenticationFacade;
 import com.elearning.fe.util.impl.ControllerUtil;
 import com.elearning.fe.util.impl.RestCaller;
 
@@ -25,7 +24,10 @@ public abstract class AbstractController<T extends BaseClassModel> {
 	private ControllerUtil controllerUtil;
 	
 	@Autowired
-	private RestCaller rest;
+	protected IAuthenticationFacade authenticationFacade;
+	
+	@Autowired
+	protected RestCaller rest;
 	
 	private Class<T> clazz;
 	

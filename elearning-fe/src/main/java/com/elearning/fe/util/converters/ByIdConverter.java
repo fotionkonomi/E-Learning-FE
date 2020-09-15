@@ -5,14 +5,14 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestOperations;
 
 import com.elearning.fe.model.BaseClassModel;
+import com.elearning.fe.util.impl.RestCaller;
 
 public abstract class ByIdConverter<T extends BaseClassModel> implements Converter<String, T> {
 
 	@Autowired
-	protected RestOperations rest;
+	protected RestCaller rest;
 
 	private Class<T> modelClass;
 	
@@ -25,7 +25,7 @@ public abstract class ByIdConverter<T extends BaseClassModel> implements Convert
 		if (StringUtils.isEmpty(source)) {
 			return null;
 		}
-		ResponseEntity<T> response = rest.getForEntity("http://localhost:8181/api/" + nameOfModelClass() + "/" + source,
+		ResponseEntity<T> response = rest.getExchange("http://localhost:8181/api/" + nameOfModelClass() + "/" + source,
 				modelClass);
 		if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
 			return null;
