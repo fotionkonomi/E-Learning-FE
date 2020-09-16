@@ -1,9 +1,10 @@
 package com.elearning.fe.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -21,8 +22,9 @@ public class TestFeModel extends BaseClassModel {
 	@NotEmpty
 	private String name;
 	
+	@NotNull
 	private CourseFeModel course;
 	
-	private Set<QuestionFeModel> questions = new HashSet<>();
+	private List<QuestionFeModel> questions = new ArrayList<>();
 	
 }

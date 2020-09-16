@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:insert="/fragments/common/head.html :: headerfiles">
 </head>
@@ -22,10 +22,59 @@
 
 <script>
 $(document).ready(function () {
-    $('select').selectize({
-        sortField: 'text'
-    });
+	showQuestions();
+	$('select').selectize({
+		sortField: 'text'
+	});
 });
+
+function enableButton() {
+	var question = $('#name').val();
+	var points = $('#points').val();
+	var difficulty = $('#difficulty').val();
+	if(question && points && difficulty) {
+		$("#addQuestion").prop('disabled', false);
+	} else {
+		$("#addQuestion").prop('disabled', true);
+	}
+}
+
+function addExamQuestion() {
+	var question = $('#name').val();
+	var points = $('#points').val();
+	var difficulty = $('#difficulty').val();
+	var stringJSON = JSON.parse("{\"question\": \"" + question + "\", \"numberOfPoints\": " + points + ", \"difficulty\": \"" + difficulty.toUpperCase() +"\" }");
+	$.ajax({
+		contentType: 'application/json',
+		method: 'POST',
+		url: '/test/question',
+		data: JSON.stringify(stringJSON),
+		success : function(data) {
+			$("button[data-dismiss=\"modal\"]").click();
+			$(".questions").append("<h3>" + data.question + "</h3>");
+		},
+		error: function() {
+			alert("ERROR");
+		}
+	});
+}
+
+function showQuestions() {
+	$.ajax({
+		contentType: 'application/json',
+		method: 'GET',
+		url: '/test/questions',
+		success : function(data) {
+			for(var i = 0; i < data.length; i++) {
+				$(".questions").append("<h3>" + data[i].question + "</h3>");
+			}
+		},
+		error: function() {
+			alert("ERROR");
+		}
+	});
+}
+
 </script>
 
 </html>

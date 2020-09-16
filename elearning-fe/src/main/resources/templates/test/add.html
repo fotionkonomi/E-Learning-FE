@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
@@ -12,15 +12,68 @@
 		<div th:replace="/fragments/common/input-name.html :: inputName"></div>
 		<div
 			th:replace="/fragments/inputs/select-one.html :: select('test.field.course', 'Course', ${object}, 'course', 'courses')"></div>
+				
+				
+		<div class="questions"></div>
+		
+		
+		<button type="button" class="btn btn-info" data-toggle="modal"
+			data-target="#exampleModal" th:text="#{question.add}" style="margin-bottom: 20px;">Launch demo modal</button>
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<label for="name" class="col-sm-3 col-form-label">Question</label>
+						<textarea id="name" class="form-control" name="question" onkeyup="enableButton();"
+							placeholder="Question"></textarea>
+						
+						<label for="name" class="col-sm-3 col-form-label">Points</label>
+						<input type="number" id="points" class="form-control" onkeyup="enableButton();"
+							name="points" placeholder="Points" maxlength="2" max="99" min="1"  />
+						
+						<label for="difficulty" class="col-sm-3 col-form-label">Difficulty</label>
+						<select id="difficulty" onchange="enableButton();" class="form-control mdb-select md-form">
+							<option id="firstOptionElement" value="">Difficulty</option>
+							<option id="low">Low</option>
+							<option id="medium">Medium</option>
+							<option id="high">High</option>
+						</select>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+						<button id="addQuestion" type="button" disabled="disabled" onclick="addExamQuestion();" class="btn btn-primary">Save
+							changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
 		<div class="form-group row">
 			<div class="col-sm-10">
 				<button type="submit" class="btn btn-primary"
 					th:text="#{global.submit}">Submit</button>
 			</div>
 		</div>
+		
+		
 	</form>
+	
+	
 
 
 </body>
+
+
 
 </html>
