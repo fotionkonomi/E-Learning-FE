@@ -13,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,6 +52,18 @@ public class TestController extends AbstractController<TestFeModel> {
 	public QuestionFeModel addQuestion(@ModelAttribute("questions") List<QuestionFeModel> questions, @RequestBody QuestionFeModel question) {
 		questions.add(question);
 		return question;
+	}
+	
+	@PutMapping("/question/{questionCount}")
+	@ResponseBody
+	public QuestionFeModel editQuestion(@ModelAttribute("questions") List<QuestionFeModel> questions, @RequestBody QuestionFeModel question, @PathVariable("questionCount") int questionCount) {
+		QuestionFeModel questionToEdit = questions.get(questionCount);
+		questionToEdit.setQuestion(question.getQuestion());
+		questionToEdit.setDifficulty(question.getDifficulty());
+		questionToEdit.setNumberOfPoints(questionToEdit.getNumberOfPoints());
+		questions.remove(questionCount);
+		questions.add(questionCount, questionToEdit);
+		return questionToEdit;
 	}
 	
 	@GetMapping("/questions")

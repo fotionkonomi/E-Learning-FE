@@ -28,7 +28,9 @@ $(document).ready(function () {
 	});
 });
 
-function enableButton() {
+var questionCount = 0;
+
+function enableDisableButton() {
 	var question = $('#name').val();
 	var points = $('#points').val();
 	var difficulty = $('#difficulty').val();
@@ -39,11 +41,71 @@ function enableButton() {
 	}
 }
 
+function enableButton(question, points, difficulty, questionCount) {
+	if(question && points && difficulty) {
+		$("#editQuestion_" + questionCount).prop('disabled', false);
+	} else {
+		$("#editQuestion_" + questionCount).prop('disabled', true);
+	}
+}
+
+function editExamQuestion(questionCount) {
+	var question = $('#name_' + questionCount).val();
+	var points = $('#points_' + questionCount).val();
+	var difficulty = $('#difficulty_' + questionCount).val();
+	var stringJSON = JSON.parse("{\"question\": \"" + escapeTabChars(escapeNewLineChars(question)) + "\", \"numberOfPoints\": " + points + ", \"difficulty\": \"" + difficulty.toUpperCase() +"\" }");
+	console.log(stringJSON);
+	$.ajax({
+		contentType: 'application/json',
+		method: 'PUT',
+		url: '/test/question/' + (questionCount-1),
+		data: JSON.stringify(stringJSON),
+		success : function(data) {
+			$("button[data-dismiss=\"modal\"]").click();
+			$("#labelQuestion_" + questionCount).replaceWith("<label id='labelQuestion_" + questionCount +"' for=" + questionCount + " class='col-sm-6 col-form-label'>Question " + questionCount + ": </label>");
+			$("#divQuestion_" + questionCount).replaceWith("<div id='divQuestion_" + questionCount + "' class='col-sm-12 container row'><div id=" + questionCount + " class='form-control col-sm-9' style='height: auto; word-break: break-word;'>" + return50Characters(data.question) + "</div><div class='col-sm-3'><button id='editButton" + questionCount + "'  type='button' class='btn btn-warning' data-target='#exampleModal_" + questionCount + "' data-toggle='modal'>Edit</button><button type='button' class='delete btn btn-danger'>Delete</button></div></div>");
+			$("#exampleModal_" + questionCount).replaceWith('<div class="modal" id="exampleModal_' + questionCount +'" tabindex="-1" role="dialog" '
+				+'	aria-labelledby="exampleModalLabel_' + questionCount +'" aria-hidden="true"> '
+				+'	<div class="modal-dialog" role="document"> '
+				+'		<div class="modal-content"> '
+				+'			<div class="modal-header"> '
+				+'				<h5 class="modal-title" id="exampleModalLabel_' + questionCount +'">Modal title</h5> '
+				+'				<button type="button" class="close" data-dismiss="modal" '
+				+'					aria-label="Close">'
+				+'					<span aria-hidden="true">&times;</span>'
+				+'				</button>'
+				+'			</div>'
+				+'			<div class="modal-body">'
+				+'				<label for="name_'+ questionCount + '" class="col-sm-3 col-form-label">Question</label>'
+				+'				<textarea id="name_'+ questionCount + '" class="form-control" name="question" onkeyup="enableButton(\''+data.question+'\', ' + data.numberOfPoints +',\'' + data.difficulty +'\', ' + questionCount +' );"'
+				+'					placeholder="Question">'+ data.question +'</textarea>'
+				+'				<label for="points_'+ questionCount + '" class="col-sm-3 col-form-label">Points</label>'
+				+'				<input type="number" id="points_'+ questionCount + '" class="form-control" onkeyup="enableButton(\''+data.question+'\', ' + data.numberOfPoints +',\'' + data.difficulty +'\', ' + questionCount +' );" value='+ data.numberOfPoints +''
+				+'					name="points" placeholder="Points" maxlength="2" max="99" min="1"  />'
+				+'				<label for="difficulty_'+ questionCount + '" class="col-sm-3 col-form-label">Difficulty</label>'
+				+'				<select id="difficulty_'+ questionCount + '" onchange="enableButton(\''+data.question+'\', ' + data.numberOfPoints +',\'' + data.difficulty +'\', ' + questionCount +' );" class="form-control mdb-select md-form">' + getDifficultyOptions(data.difficulty) + ''
+				+'				</select>'
+				+'			</div>'
+				+'		<div class="modal-footer">'
+				+'				<button type="button" class="btn btn-secondary"'
+				+'					data-dismiss="modal">Close</button>'
+				+'				<button id="editQuestion_' + questionCount + '" type="button" disabled="disabled" onclick="editExamQuestion('+ questionCount +');" class="btn btn-primary">Save'
+				+'					changes</button>'
+				+'			</div>'
+				+'		</div>'
+				+'	</div>'
+				+'</div>');		},
+		error: function() {
+			alert("ERROR");
+		}
+	});
+}
+
 function addExamQuestion() {
 	var question = $('#name').val();
 	var points = $('#points').val();
 	var difficulty = $('#difficulty').val();
-	var stringJSON = JSON.parse("{\"question\": \"" + question + "\", \"numberOfPoints\": " + points + ", \"difficulty\": \"" + difficulty.toUpperCase() +"\" }");
+	var stringJSON = JSON.parse("{\"question\": \"" + escapeTabChars(escapeNewLineChars(question)) + "\", \"numberOfPoints\": " + points + ", \"difficulty\": \"" + difficulty.toUpperCase() +"\" }");
 	$.ajax({
 		contentType: 'application/json',
 		method: 'POST',
@@ -51,8 +113,40 @@ function addExamQuestion() {
 		data: JSON.stringify(stringJSON),
 		success : function(data) {
 			$("button[data-dismiss=\"modal\"]").click();
-			$(".questions").append("<h3>" + data.question + "</h3>");
-		},
+			questionCount++;
+			$(".questions").append("<label id='labelQuestion_" + questionCount +"' for=" + questionCount + " class='col-sm-6 col-form-label'>Question " + questionCount + ": </label>");
+			$(".questions").append("<div id='divQuestion_" + questionCount + "' class='col-sm-12 container row'><div id=" + questionCount + " class='form-control col-sm-9' style='height: auto; word-break: break-word;'>" + return50Characters(data.question) + "</div><div class='col-sm-3'><button id='editButton" + questionCount + "'  type='button' class='btn btn-warning' data-target='#exampleModal_" + questionCount + "' data-toggle='modal'>Edit</button><button type='button' class='delete btn btn-danger'>Delete</button></div></div>");
+			$(".questions").append('<div class="modal" id="exampleModal_' + questionCount +'" tabindex="-1" role="dialog" '
+				+'	aria-labelledby="exampleModalLabel_' + questionCount +'" aria-hidden="true"> '
+				+'	<div class="modal-dialog" role="document"> '
+				+'		<div class="modal-content"> '
+				+'			<div class="modal-header"> '
+				+'				<h5 class="modal-title" id="exampleModalLabel_' + questionCount +'">Modal title</h5> '
+				+'				<button type="button" class="close" data-dismiss="modal" '
+				+'					aria-label="Close">'
+				+'					<span aria-hidden="true">&times;</span>'
+				+'				</button>'
+				+'			</div>'
+				+'			<div class="modal-body">'
+				+'				<label for="name_'+ questionCount + '" class="col-sm-3 col-form-label">Question</label>'
+				+'				<textarea id="name_'+ questionCount + '" class="form-control" name="question" onkeyup="enableButton(\''+data.question+'\', ' + data.numberOfPoints +',\'' + data.difficulty +'\', ' + questionCount +' );"'
+				+'					placeholder="Question">'+ data.question +'</textarea>'
+				+'				<label for="points_'+ questionCount + '" class="col-sm-3 col-form-label">Points</label>'
+				+'				<input type="number" id="points_'+ questionCount + '" class="form-control" onkeyup="enableButton(\''+data.question+'\', ' + data.numberOfPoints +',\'' + data.difficulty +'\', ' + questionCount +' );" value='+ data.numberOfPoints +''
+				+'					name="points" placeholder="Points" maxlength="2" max="99" min="1"  />'
+				+'				<label for="difficulty_'+ questionCount + '" class="col-sm-3 col-form-label">Difficulty</label>'
+				+'				<select id="difficulty_'+ questionCount + '" onchange="enableButton(\''+data.question+'\', ' + data.numberOfPoints +',\'' + data.difficulty +'\', ' + questionCount +' );" class="form-control mdb-select md-form">' + getDifficultyOptions(data.difficulty) + ''
+				+'				</select>'
+				+'			</div>'
+				+'		<div class="modal-footer">'
+				+'				<button type="button" class="btn btn-secondary"'
+				+'					data-dismiss="modal">Close</button>'
+				+'				<button id="editQuestion_' + questionCount + '" type="button" disabled="disabled" onclick="editExamQuestion('+ questionCount +');" class="btn btn-primary">Save'
+				+'					changes</button>'
+				+'			</div>'
+				+'		</div>'
+				+'	</div>'
+				+'</div>');		},
 		error: function() {
 			alert("ERROR");
 		}
@@ -65,14 +159,81 @@ function showQuestions() {
 		method: 'GET',
 		url: '/test/questions',
 		success : function(data) {
+			console.log(data);
 			for(var i = 0; i < data.length; i++) {
-				$(".questions").append("<h3>" + data[i].question + "</h3>");
+				questionCount++;
+				$(".questions").append("<label id='labelQuestion_" + questionCount +"' for=" + questionCount + " class='col-sm-9 col-form-label'>Question " + questionCount + ": </label>");
+				$(".questions").append("<div id='divQuestion_" + questionCount + "' class='col-sm-12 container row'><div id=" + questionCount + " class='form-control col-sm-9' style='height: auto; word-break: break-word;'>" + return50Characters(data[i].question) + "</div><div class='col-sm-3'><button id='editButton" + questionCount + "'  type='button' class='btn btn-warning' data-target='#exampleModal_" + questionCount + "' data-toggle='modal'>Edit</button><button type='button' class='delete btn btn-danger'>Delete</button></div></div>");
+				$("#editButton" + questionCount).after('<div class="modal" id="exampleModal_' + questionCount +'" tabindex="-1" role="dialog" '
+					+'	aria-labelledby="exampleModalLabel_' + questionCount +'" aria-hidden="true"> '
+					+'	<div class="modal-dialog" role="document"> '
+					+'		<div class="modal-content"> '
+					+'			<div class="modal-header"> '
+					+'				<h5 class="modal-title" id="exampleModalLabel_' + questionCount +'">Modal title</h5> '
+					+'				<button type="button" class="close" data-dismiss="modal" '
+					+'					aria-label="Close">'
+					+'					<span aria-hidden="true">&times;</span>'
+					+'				</button>'
+					+'			</div>'
+					+'			<div class="modal-body">'
+					+'				<label for="name_'+ questionCount + '" class="col-sm-3 col-form-label">Question</label>'
+					+'				<textarea id="name_'+ questionCount + '" class="form-control" name="question" onkeyup="enableButton(\''+data[questionCount-1].question+'\', ' + data[questionCount-1].numberOfPoints +',\'' + data[questionCount-1].difficulty +'\', ' + questionCount +' );"'
+					+'					placeholder="Question">'+ data[questionCount-1].question +'</textarea>'
+					+'				<label for="points_'+ questionCount + '" class="col-sm-3 col-form-label">Points</label>'
+					+'				<input type="number" id="points_'+ questionCount + '" class="form-control" onkeyup="enableButton(\''+data[questionCount-1].question+'\', ' + data[questionCount-1].numberOfPoints +',\'' + data[questionCount-1].difficulty +'\', ' + questionCount +' );" value='+ data[questionCount-1].numberOfPoints +''
+					+'					name="points" placeholder="Points" maxlength="2" max="99" min="1"  />'
+					+'				<label for="difficulty_'+ questionCount + '" class="col-sm-3 col-form-label">Difficulty</label>'
+					+'				<select id="difficulty_'+ questionCount + '" onchange="enableButton(\''+data[questionCount-1].question+'\', ' + data[questionCount-1].numberOfPoints +',\'' + data[questionCount-1].difficulty +'\', ' + questionCount +' );" class="form-control mdb-select md-form">' + getDifficultyOptions(data[questionCount-1].difficulty) + ''
+					+'				</select>'
+					+'			</div>'
+					+'		<div class="modal-footer">'
+					+'				<button type="button" class="btn btn-secondary"'
+					+'					data-dismiss="modal">Close</button>'
+					+'				<button id="editQuestion_' + questionCount + '" type="button" disabled="disabled" onclick="editExamQuestion('+ questionCount +');" class="btn btn-primary">Save'
+					+'					changes</button>'
+					+'			</div>'
+					+'		</div>'
+					+'	</div>'
+					+'</div>');
 			}
 		},
 		error: function() {
 			alert("ERROR");
 		}
 	});
+}
+
+function escapeNewLineChars(valueToEscape) {
+	   if (valueToEscape != null && valueToEscape != "") {
+	      return valueToEscape.replace(/\n/g, "\\n");
+	   } else {
+	      return valueToEscape;
+	   } 
+}
+
+function escapeTabChars(valueToTab) {
+	   if (valueToTab != null && valueToTab != "") {
+		      return valueToTab.replace(/\t/g, "\\t");
+		   } else {
+		      return valueToTab;
+		   } 
+}
+
+function getDifficultyOptions(difficulty) {
+	var firstElement = '<option id="firstOptionElement" value="">Difficulty</option>';
+	var lowOption = difficulty == "LOW" ? '<option id="low" selected="selected">Low</option>' : '<option id="low">Low</option>';
+	var mediumOption = difficulty == "MEDIUM" ? '<option id="medium" selected="selected">Medium</option>' : '<option id="medium">Medium</option>';
+	var highOption = difficulty == "HIGH" ? '<option id="high" selected="selected">High</option>' : '<option id="high">High</option>';
+	
+	return firstElement + lowOption + mediumOption + highOption;
+}
+
+function return50Characters(question) {
+	if(question != null && question != "" && question.length > 50) {
+		return question.substring(0, 50).concat(" ...");
+	} else {
+		return question;
+	}
 }
 
 </script>

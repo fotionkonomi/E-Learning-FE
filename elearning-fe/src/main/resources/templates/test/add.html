@@ -13,9 +13,8 @@
 		<div
 			th:replace="/fragments/inputs/select-one.html :: select('test.field.course', 'Course', ${object}, 'course', 'courses')"></div>
 				
-				
-		<div class="questions"></div>
 		
+		<div class="questions form-group row"></div>
 		
 		<button type="button" class="btn btn-info" data-toggle="modal"
 			data-target="#exampleModal" th:text="#{question.add}" style="margin-bottom: 20px;">Launch demo modal</button>
@@ -32,15 +31,15 @@
 					</div>
 					<div class="modal-body">
 						<label for="name" class="col-sm-3 col-form-label">Question</label>
-						<textarea id="name" class="form-control" name="question" onkeyup="enableButton();"
+						<textarea id="name" class="form-control" name="question" onkeyup="enableDisableButton();"
 							placeholder="Question"></textarea>
 						
-						<label for="name" class="col-sm-3 col-form-label">Points</label>
-						<input type="number" id="points" class="form-control" onkeyup="enableButton();"
+						<label for="points" class="col-sm-3 col-form-label">Points</label>
+						<input type="number" id="points" class="form-control" onkeyup="enableDisableButton();"
 							name="points" placeholder="Points" maxlength="2" max="99" min="1"  />
 						
 						<label for="difficulty" class="col-sm-3 col-form-label">Difficulty</label>
-						<select id="difficulty" onchange="enableButton();" class="form-control mdb-select md-form">
+						<select id="difficulty" onchange="enableDisableButton();" class="form-control mdb-select md-form">
 							<option id="firstOptionElement" value="">Difficulty</option>
 							<option id="low">Low</option>
 							<option id="medium">Medium</option>
