@@ -60,6 +60,19 @@ function enableButtonForAnswer(questionCount) {
 	}
 }
 
+function enableButtonForAnswerEdit(questionCount, answerCount) {
+	var answer = $("#answerName_" + questionCount + "_" + answerCount);
+	if(answer) {
+		$("#editAnswer_" + questionCount + "_" + answerCount).prop('disabled', false);
+	} else {
+		$("#editAnswer_" + questionCount + "_" + answerCount).prop('disabled', true);
+	}
+}
+
+function enableButtonForAnswerEditFromCheckbox(questionCount, answerCount) {
+	$("#editAnswer_" + questionCount + "_" + answerCount).prop('disabled', false);
+}
+
 function addAnswer(questionCount) {
 	var answer = $('#answerName_' + questionCount).val();
 	var correct = document.getElementById('answerCorrect_' + questionCount).checked;
@@ -76,7 +89,7 @@ function addAnswer(questionCount) {
 		success: function(data) {
 			$("button[data-dismiss=\"modal\"]").click();
 			answersCount[questionCount]++;
-			$("#answersForQuestion_"+ questionCount).append("<div id='divAnswer_"  + questionCount + "_" + answersCount[questionCount] + "' style='font-size: 14px; color: " + (correct ? 'green;' : 'red;') + " '><a href='#' style='color: inherit;' data-toggle='modal' data-target='exampleAnswerModal_" + questionCount + "_" + answersCount[questionCount] + "' >" + answersCount[questionCount] + "- " + data.answer + "</a></div>");
+			$("#answersForQuestion_"+ questionCount).append("<div id='divAnswer_"  + questionCount + "_" + answersCount[questionCount] + "' style='font-size: 14px; color: " + (correct ? 'green;' : 'red;') + " '><a id='linkAnswer_" + questionCount + "_" + answersCount[questionCount] +"' href='#' style='color: inherit;' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount + "_" + answersCount[questionCount] + "' >" + answersCount[questionCount] + "- " + data.answer + "</a></div>");
 			$("#divAnswer_" + questionCount + "_" + answersCount[questionCount]).append('<div class="modal" id="exampleAnswerModal_' + questionCount + '_' + answersCount[questionCount] + '" tabindex="-1" role="dialog" '
 					+'	aria-labelledby="exampleAnswerModalLabel_' + questionCount + '_' + answersCount[questionCount] + '" aria-hidden="true"> '
 					+'	<div class="modal-dialog" role="document"> '
@@ -90,15 +103,15 @@ function addAnswer(questionCount) {
 					+'			</div>'
 					+'			<div class="modal-body">'
 					+'				<label for="answerName_' + questionCount + '_' + answersCount[questionCount] + '" class="col-sm-3 col-form-label">Answer</label>'
-					+'				<input type="text" id="answerName_' + questionCount + '_' + answersCount[questionCount] + '" class="form-control" name="answerName" onkeyup="enableButtonForAnswerEdit(' + questionCount + '_' + answersCount[questionCount] + ');"'
-					+'					placeholder="Answer" />'
-					+'				<input type="checkbox" id="answerCorrect_' + questionCount + '_' + answersCount[questionCount] + '" name="correct" style="margin-top: 10px;" />'
+					+'				<input type="text" id="answerName_' + questionCount + '_' + answersCount[questionCount] + '" class="form-control" name="answerName" onkeyup="enableButtonForAnswerEdit(' + questionCount + ',' + answersCount[questionCount] + ');"'
+					+'					placeholder="Answer" value="' + data.answer + '" />'
+					+'				<input type="checkbox" id="answerCorrect_' + questionCount + '_' + answersCount[questionCount] + '" name="correct" style="margin-top: 10px;" onchange="enableButtonForAnswerEditFromCheckbox(' + questionCount + ',' + answersCount[questionCount] + ');" />'
 					+'				<label for="answerCorrect_' + questionCount + '_' + answersCount[questionCount] + '">Correct</label>'
 					+'			</div>'
 					+'		<div class="modal-footer">'
 					+'				<button type="button" class="btn btn-secondary"'
 					+'					data-dismiss="modal">Close</button>'
-					+'				<button id="editAnswer_' + questionCount + '_' + answersCount[questionCount] + '" type="button" disabled="disabled" onclick="addAnswer(' + questionCount + '_' + answersCount[questionCount] + ');" class="btn btn-primary">Save'
+					+'				<button id="editAnswer_' + questionCount + '_' + answersCount[questionCount] + '" type="button" disabled="disabled" onclick="editAnswer(' + questionCount + ',' + answersCount[questionCount] + ');" class="btn btn-primary">Save'
 					+'					changes</button>'
 					+'			</div>'
 					+'		</div>'
@@ -106,6 +119,8 @@ function addAnswer(questionCount) {
 					+'</div>'
 				
 			);
+			document.getElementById("answerCorrect_" + questionCount + "_" + answersCount[questionCount]).checked = data.correct === true;
+
 		},
 		error: function() {
 			alert("ERROR");
@@ -115,6 +130,34 @@ function addAnswer(questionCount) {
 	
 }
 
+function editAnswer(questionCount, answerCount) {
+	var answer = $('#answerName_' + questionCount + '_' + answerCount).val();
+	var correct = document.getElementById('answerCorrect_' + questionCount + '_' + answerCount).checked;
+	var answerJSON = {
+			answer: answer,
+			correct: correct,
+	};
+	
+	var stringAnswerJSON = JSON.stringify(answerJSON);
+	$.ajax({
+		contentType: 'application/json',
+		method: 'PUT',
+		url: '/test/answer/' + (questionCount-1) + '/' + (answerCount-1),
+		data: stringAnswerJSON,
+		success: function(data) {
+			$("button[data-dismiss=\"modal\"]").click();
+			$("#linkAnswer_" + questionCount + "_" + answerCount).replaceWith("<a id='linkAnswer_" + questionCount + "_" + answerCount +"' href='#' style='color: inherit;' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount + "_" + answerCount + "'>" + answerCount + "- " + data.answer + "</a>");
+			$("#divAnswer_" + questionCount + "_" + answerCount).css("color", data.correct == true ? "green" : "red");
+			var answerName = document.getElementById("answerName_" + questionCount + "_" + answerCount);
+			answerName.value = data.answer;
+			document.getElementById("answerCorrect_" + questionCount + "_" + answerCount).checked = data.correct === true;
+		},
+		error: function() {
+			
+		}
+	
+	});
+}
 
 function getAnswersForQuestion(questionCount) {
 	answersCount[questionCount] = 0;
@@ -125,7 +168,7 @@ function getAnswersForQuestion(questionCount) {
 		success : function(data) {
 			for(var i = 0; i < data.length; i++) {
 				answersCount[questionCount]++;
-				$("#answersForQuestion_"+ questionCount).append("<div id='divAnswer_"  + questionCount + "_" + answersCount[questionCount] + "' style='font-size: 14px; color: " + (data[i].correct ? 'green;' : 'red;') + " '><a href='#' style='color: inherit;' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount + "_" + answersCount[questionCount] + "'>" + answersCount[questionCount] + "- " + data[i].answer + "</a></div>");
+				$("#answersForQuestion_"+ questionCount).append("<div id='divAnswer_"  + questionCount + "_" + answersCount[questionCount] + "' style='font-size: 14px; color: " + (data[i].correct ? 'green;' : 'red;') + " '><a id='linkAnswer_" + questionCount + "_" + answersCount[questionCount] +"' href='#' style='color: inherit;' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount + "_" + answersCount[questionCount] + "'>" + answersCount[questionCount] + "- " + data[i].answer + "</a></div>");
 				$("#divAnswer_" + questionCount + "_" + answersCount[questionCount]).append('<div class="modal" style="color: grey;" id="exampleAnswerModal_' + questionCount + '_' + answersCount[questionCount] + '" tabindex="-1" role="dialog" '
 						+'	aria-labelledby="exampleAnswerModalLabel_' + questionCount + '_' + answersCount[questionCount] + '" aria-hidden="true"> '
 						+'	<div class="modal-dialog" role="document"> '
@@ -139,15 +182,15 @@ function getAnswersForQuestion(questionCount) {
 						+'			</div>'
 						+'			<div class="modal-body">'
 						+'				<label for="answerName_' + questionCount + '_' + answersCount[questionCount] + '" class="col-sm-3 col-form-label">Answer</label>'
-						+'				<input type="text" id="answerName_' + questionCount + '_' + answersCount[questionCount] + '" class="form-control" name="answerName" onkeyup="enableButtonForAnswerEdit(' + questionCount + '_' + answersCount[questionCount] + ');"'
-						+'					placeholder="Answer" />'
-						+'				<input type="checkbox" id="answerCorrect_' + questionCount + '_' + answersCount[questionCount] + '" name="correct" style="margin-top: 10px;" />'
+						+'				<input type="text" id="answerName_' + questionCount + '_' + answersCount[questionCount] + '" class="form-control" name="answerName" onkeyup="enableButtonForAnswerEdit(' + questionCount + ',' + answersCount[questionCount] + ');"'
+						+'					placeholder="Answer" value="' + data[i].answer + '" />'
+						+'				<input type="checkbox" id="answerCorrect_' + questionCount + '_' + answersCount[questionCount] + '" name="correct" style="margin-top: 10px;" onchange="enableButtonForAnswerEditFromCheckbox(' + questionCount + ',' + answersCount[questionCount] + ');" />'
 						+'				<label for="answerCorrect_' + questionCount + '_' + answersCount[questionCount] + '">Correct</label>'
 						+'			</div>'
 						+'		<div class="modal-footer">'
 						+'				<button type="button" class="btn btn-secondary"'
 						+'					data-dismiss="modal">Close</button>'
-						+'				<button id="editAnswer_' + questionCount + '_' + answersCount[questionCount] + '" type="button" disabled="disabled" onclick="addAnswer(' + questionCount + '_' + answersCount[questionCount] + ');" class="btn btn-primary">Save'
+						+'				<button id="editAnswer_' + questionCount + '_' + answersCount[questionCount] + '" type="button" disabled="disabled" onclick="editAnswer(' + questionCount + ',' + answersCount[questionCount] + ');" class="btn btn-primary">Save'
 						+'					changes</button>'
 						+'			</div>'
 						+'		</div>'
@@ -155,6 +198,7 @@ function getAnswersForQuestion(questionCount) {
 						+'</div>'
 					
 				);
+				document.getElementById("answerCorrect_" + questionCount + "_" + answersCount[questionCount]).checked = data[i].correct === true;
 			}
 		},
 		error: function() {

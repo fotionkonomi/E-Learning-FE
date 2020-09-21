@@ -85,6 +85,17 @@ public class TestController extends AbstractController<TestFeModel> {
 		questions.add(questionCount, questionToEdit);
 		return questionToEdit;
 	}
+	
+	@PutMapping("/answer/{questionCount}/{answerCount}")
+	@ResponseBody
+	public AnswerFeModel editAnswer(@RequestBody AnswerFeModel answer, @PathVariable("questionCount") int questionCount, @PathVariable("answerCount") int answerCount) {
+		AnswerFeModel answerToEdit = getAnswersOfAQuestion(questionCount).get(answerCount);
+		answers.remove(answerToEdit);
+		answerToEdit.setAnswer(answer.getAnswer());
+		answerToEdit.setCorrect(answer.getCorrect());
+		answers.add(answerCount, answerToEdit);
+		return answerToEdit;
+	}
 
 	@GetMapping("/questions")
 	@ResponseBody
