@@ -90,7 +90,7 @@ function addAnswer(questionCount) {
 			$("button[data-dismiss=\"modal\"]").click();
 			answersCount[questionCount]++;
 			$("#answersForQuestion_"+ questionCount).append("<div id='divAnswer_"  + questionCount + "_" + answersCount[questionCount] + "' style='font-size: 14px; color: " + (correct ? 'green;' : 'red;') + " '><a id='linkAnswer_" + questionCount + "_" + answersCount[questionCount] +"' href='#' style='color: inherit;' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount + "_" + answersCount[questionCount] + "' >" + answersCount[questionCount] + "- " + data.answer + "</a></div>");
-			$("#divAnswer_" + questionCount + "_" + answersCount[questionCount]).append('<div class="modal" id="exampleAnswerModal_' + questionCount + '_' + answersCount[questionCount] + '" tabindex="-1" role="dialog" '
+			$("#divAnswer_" + questionCount + "_" + answersCount[questionCount]).append('<div class="modal" style="color: grey;" id="exampleAnswerModal_' + questionCount + '_' + answersCount[questionCount] + '" tabindex="-1" role="dialog" '
 					+'	aria-labelledby="exampleAnswerModalLabel_' + questionCount + '_' + answersCount[questionCount] + '" aria-hidden="true"> '
 					+'	<div class="modal-dialog" role="document"> '
 					+'		<div class="modal-content"> '
