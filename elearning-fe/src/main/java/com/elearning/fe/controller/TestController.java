@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,6 +97,28 @@ public class TestController extends AbstractController<TestFeModel> {
 		answers.add(answerCount, answerToEdit);
 		return answerToEdit;
 	}
+	
+	@DeleteMapping("/answer/delete/{questionCount}/{answerCount}")
+	@ResponseBody
+	public void deleteAnswer(@PathVariable("questionCount") int questionCount, @PathVariable("answerCount") int answerCount) {
+		AnswerFeModel answerToRemove = getAnswersOfAQuestion(questionCount).get(answerCount);
+		answers.remove(answerToRemove);
+	}
+	
+	@DeleteMapping("/question/delete/{questionCount}") 
+	@ResponseBody
+	public void deleteQuestion(@PathVariable("questionCount") int questionCount) {
+		log.info("Quesitons Before:" + questions);
+		log.info("Answers Before: " + answers);
+		List<AnswerFeModel> answersToRemove = getAnswersOfAQuestion(questionCount);
+		if(!answersToRemove.isEmpty()) {
+			answers.removeAll(answersToRemove);
+		}
+		questions.remove(questionCount);
+		
+		log.info("Quesitons After:" + questions);
+		log.info("Answers After: " + answers);
+	}
 
 	@GetMapping("/questions")
 	@ResponseBody
@@ -122,5 +145,6 @@ public class TestController extends AbstractController<TestFeModel> {
 		testFeModel.setQuestions(questions);
 		return add(testFeModel, errors);
 	}
+	
 
 }

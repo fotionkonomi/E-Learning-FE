@@ -89,7 +89,7 @@ function addAnswer(questionCount) {
 		success: function(data) {
 			$("button[data-dismiss=\"modal\"]").click();
 			answersCount[questionCount]++;
-			$("#answersForQuestion_"+ questionCount).append("<div id='divAnswer_"  + questionCount + "_" + answersCount[questionCount] + "' style='font-size: 14px; color: " + (correct ? 'green;' : 'red;') + " '><a id='linkAnswer_" + questionCount + "_" + answersCount[questionCount] +"' href='#' style='color: inherit;' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount + "_" + answersCount[questionCount] + "' >" + answersCount[questionCount] + "- " + data.answer + "</a></div>");
+			$("#answersForQuestion_"+ questionCount).append("<div id='divAnswer_"  + questionCount + "_" + answersCount[questionCount] + "' style='font-size: 14px; color: " + (correct ? 'green;' : 'red;') + " '><a id='linkAnswer_" + questionCount + "_" + answersCount[questionCount] +"' href='#' style='color: inherit;' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount + "_" + answersCount[questionCount] + "' >" + answersCount[questionCount] + "- " + data.answer + "</a><button type='button' id='deleteAnswer_" + questionCount + "_" + answersCount[questionCount] + "' onclick='deleteAnswer(" + questionCount + ", " + answersCount[questionCount] +")' class='close' aria-label='Close' style='float: initial; position: relative; left: 5px;'><span style='font-size: 16px; color: #e74a3b; opacity: 1;' aria-hidden='true'>&times;</span></button></div>");
 			$("#divAnswer_" + questionCount + "_" + answersCount[questionCount]).append('<div class="modal" style="color: grey;" id="exampleAnswerModal_' + questionCount + '_' + answersCount[questionCount] + '" tabindex="-1" role="dialog" '
 					+'	aria-labelledby="exampleAnswerModalLabel_' + questionCount + '_' + answersCount[questionCount] + '" aria-hidden="true"> '
 					+'	<div class="modal-dialog" role="document"> '
@@ -168,7 +168,7 @@ function getAnswersForQuestion(questionCount) {
 		success : function(data) {
 			for(var i = 0; i < data.length; i++) {
 				answersCount[questionCount]++;
-				$("#answersForQuestion_"+ questionCount).append("<div id='divAnswer_"  + questionCount + "_" + answersCount[questionCount] + "' style='font-size: 14px; color: " + (data[i].correct ? 'green;' : 'red;') + " '><a id='linkAnswer_" + questionCount + "_" + answersCount[questionCount] +"' href='#' style='color: inherit;' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount + "_" + answersCount[questionCount] + "'>" + answersCount[questionCount] + "- " + data[i].answer + "</a></div>");
+				$("#answersForQuestion_"+ questionCount).append("<div id='divAnswer_"  + questionCount + "_" + answersCount[questionCount] + "' style='font-size: 14px; color: " + (data[i].correct ? 'green;' : 'red;') + " '><a id='linkAnswer_" + questionCount + "_" + answersCount[questionCount] +"' href='#' style='color: inherit;' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount + "_" + answersCount[questionCount] + "'>" + answersCount[questionCount] + "- " + data[i].answer + "</a><button type='button' id='deleteAnswer_" + questionCount + "_" + answersCount[questionCount] +"' onclick='deleteAnswer(" + questionCount + ", " + answersCount[questionCount] +")' class='close' aria-label='Close' style='float: initial; position: relative; left: 5px;'><span style='font-size: 16px; color: #e74a3b; opacity: 1;' aria-hidden='true'>&times;</span></button></div>");
 				$("#divAnswer_" + questionCount + "_" + answersCount[questionCount]).append('<div class="modal" style="color: grey;" id="exampleAnswerModal_' + questionCount + '_' + answersCount[questionCount] + '" tabindex="-1" role="dialog" '
 						+'	aria-labelledby="exampleAnswerModalLabel_' + questionCount + '_' + answersCount[questionCount] + '" aria-hidden="true"> '
 						+'	<div class="modal-dialog" role="document"> '
@@ -224,7 +224,7 @@ function editExamQuestion(questionCount) {
 		success : function(data) {
 			$("button[data-dismiss=\"modal\"]").click();
 			$("#labelQuestion_" + questionCount).replaceWith("<label id='labelQuestion_" + questionCount +"' for=" + questionCount + " class='col-sm-6 col-form-label'>Question " + questionCount + ": </label>");
-			$("#divQuestion_" + questionCount).replaceWith("<div id='divQuestion_" + questionCount + "' class='col-sm-12 container row'><div id=" + questionCount + " class='form-control col-sm-9' style='height: auto; word-break: break-word; color: black;'>" + return50Characters(data.question) + "<div><div id='answersForQuestion_" + questionCount + "'></div><button id='addAnswerButton_" + questionCount + "' type='button' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount +"' style='margin-left: 0px;' class='delete btn btn-link'>Add Answer</button></div></div><div class='col-sm-3'><button id='editButton" + questionCount + "'  type='button' class='btn btn-warning' data-target='#exampleModal_" + questionCount + "' data-toggle='modal'>Edit</button><button type='button' class='delete btn btn-danger'>Delete</button></div></div>");
+			$("#divQuestion_" + questionCount).replaceWith("<div id='divQuestion_" + questionCount + "' class='col-sm-12 container row'><div id=" + questionCount + " class='form-control col-sm-9' style='height: auto; word-break: break-word; color: black;'>" + return50Characters(data.question) + "<div><div id='answersForQuestion_" + questionCount + "'></div><button id='addAnswerButton_" + questionCount + "' type='button' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount +"' style='margin-left: 0px;' class='delete btn btn-link'>Add Answer</button></div></div><div class='col-sm-3'><button id='editButton" + questionCount + "'  type='button' class='btn btn-warning' data-target='#exampleModal_" + questionCount + "' data-toggle='modal'>Edit</button><button onclick='deleteQuestion(" + questionCount + ");' type='button' class='delete btn btn-danger'>Delete</button></div></div>");
 
 			$("#exampleModal_" + questionCount).replaceWith('<div class="modal" id="exampleModal_' + questionCount +'" tabindex="-1" role="dialog" '
 				+'	aria-labelledby="exampleModalLabel_' + questionCount +'" aria-hidden="true"> '
@@ -280,7 +280,7 @@ function addExamQuestion() {
 			questionCount++;
 			answersCount[questionCount] = 0;
 			$(".questions").append("<label id='labelQuestion_" + questionCount +"' for=" + questionCount + " class='col-sm-6 col-form-label'>Question " + questionCount + ": </label>");
-			$(".questions").append("<div id='divQuestion_" + questionCount + "' class='col-sm-12 container row'><div id=" + questionCount + " class='form-control col-sm-9' style='height: auto; word-break: break-word; color: black;'>" + return50Characters(data.question) + "<div><div id='answersForQuestion_" + questionCount + "'></div><button id='addAnswerButton_" + questionCount + "' type='button' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount +"' style='margin-left: 0px;' class='delete btn btn-link'>Add Answer</button></div></div><div class='col-sm-3'><button id='editButton" + questionCount + "'  type='button' class='btn btn-warning' data-target='#exampleModal_" + questionCount + "' data-toggle='modal'>Edit</button><button type='button' class='delete btn btn-danger'>Delete</button></div></div>");
+			$(".questions").append("<div id='divQuestion_" + questionCount + "' class='col-sm-12 container row'><div id=" + questionCount + " class='form-control col-sm-9' style='height: auto; word-break: break-word; color: black;'>" + return50Characters(data.question) + "<div><div id='answersForQuestion_" + questionCount + "'></div><button id='addAnswerButton_" + questionCount + "' type='button' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount +"' style='margin-left: 0px;' class='delete btn btn-link'>Add Answer</button></div></div><div class='col-sm-3'><button id='editButton" + questionCount + "'  type='button' class='btn btn-warning' data-target='#exampleModal_" + questionCount + "' data-toggle='modal'>Edit</button><button onclick='deleteQuestion(" + questionCount + ");' type='button' class='delete btn btn-danger'>Delete</button></div></div>");
 			
 			$(".questions").append('<div class="modal" style="color: grey;" id="exampleAnswerModal_' + questionCount +'" tabindex="-1" role="dialog" '
 					+'	aria-labelledby="exampleAnswerModalLabel_' + questionCount +'" aria-hidden="true"> '
@@ -359,7 +359,7 @@ function showQuestions() {
 			for(var i = 0; i < data.length; i++) {
 				questionCount++;
 				$(".questions").append("<label id='labelQuestion_" + questionCount +"' for=" + questionCount + " class='col-sm-9 col-form-label'>Question " + questionCount + ": </label>");
-				$(".questions").append("<div id='divQuestion_" + questionCount + "' class='col-sm-12 container row'><div id=" + questionCount + " class='form-control col-sm-9' style='height: auto; word-break: break-word; color: black;'>" + return50Characters(data[i].question) + "<div><div id='answersForQuestion_" + questionCount + "'></div><button id='addAnswerButton_" + questionCount + "' type='button' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount +"' style='margin-left: 0px;' class='delete btn btn-link'>Add Answer</button></div></div><div class='col-sm-3'><button id='editButton" + questionCount + "'  type='button' class='btn btn-warning' data-target='#exampleModal_" + questionCount + "' data-toggle='modal'>Edit</button><button type='button' class='delete btn btn-danger'>Delete</button></div></div>");
+				$(".questions").append("<div id='divQuestion_" + questionCount + "' class='col-sm-12 container row'><div id=" + questionCount + " class='form-control col-sm-9' style='height: auto; word-break: break-word; color: black;'>" + return50Characters(data[i].question) + "<div><div id='answersForQuestion_" + questionCount + "'></div><button id='addAnswerButton_" + questionCount + "' type='button' data-toggle='modal' data-target='#exampleAnswerModal_" + questionCount +"' style='margin-left: 0px;' class='delete btn btn-link'>Add Answer</button></div></div><div class='col-sm-3'><button id='editButton" + questionCount + "'  type='button' class='btn btn-warning' data-target='#exampleModal_" + questionCount + "' data-toggle='modal'>Edit</button><button onclick='deleteQuestion(" + questionCount + ");' type='button' class='delete btn btn-danger'>Delete</button></div></div>");
 				answersCount[questionCount] = 0;
 				$(".questions").append('<div class="modal" id="exampleAnswerModal_' + questionCount +'" tabindex="-1" role="dialog" '
 						+'	aria-labelledby="exampleAnswerModalLabel_' + questionCount +'" aria-hidden="true"> '
@@ -462,6 +462,40 @@ function return50Characters(question) {
 		return question;
 	}
 }
+
+function deleteAnswer(questionCount, answerCount) {
+	if(confirm("Are you sure?")) {
+
+			$.ajax({
+				contentType: 'application/json',
+				method: 'DELETE',
+				url: '/test/answer/delete/' + (questionCount-1) + '/' + (answerCount-1),
+				success: function(data) {
+					location = location;
+				},
+				error: function() {
+					alert("ERROR");
+				}
+			});
+		}
+} 
+
+function deleteQuestion(questionCount) {
+	if(confirm("Are you sure?")) {
+		$.ajax({
+			contentType: 'application/json',
+			method: 'DELETE',
+			url: '/test/question/delete/' + (questionCount-1),
+			success: function(data) {
+				location = location;
+			},
+			error: function() {
+				alert("ERROR");
+			}
+		});
+	}
+}
+
 
 </script>
 
