@@ -142,6 +142,9 @@ public class TestController extends AbstractController<TestFeModel> {
 
 	@PostMapping("/add")
 	public String addTest(@Valid @ModelAttribute("test") TestFeModel testFeModel, Errors errors) {
+		for(int questionCount = 0; questionCount < questions.size(); questionCount++) {
+			questions.get(questionCount).setAnswers(getAnswersOfAQuestion(questionCount));
+		}
 		testFeModel.setQuestions(questions);
 		return add(testFeModel, errors);
 	}

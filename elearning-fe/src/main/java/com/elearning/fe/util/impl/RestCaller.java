@@ -52,16 +52,16 @@ public class RestCaller implements IRestCaller {
 	          "Header '%s' = %s", key, value.stream().collect(Collectors.joining("|"))));
 	    });
 		
-		log.info("Request body: ");
-		printBody(requestEntity.getBody());
+//		log.info("Request body: ");
+//		printBody(requestEntity.getBody());
 		
 		HttpEntity<K> entity = new HttpEntity<>(requestEntity.getBody(), headers);
 			
 		ResponseEntity<T> response = rest.exchange(url, method, entity , responseType, uriVariables);
 		
-		log.info("Response body: ");
-		printBody(response.getBody());
-		
+//		log.info("Response body: ");
+//		printBody(response.getBody());
+//		
 		return response;
 
 	}
